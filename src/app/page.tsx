@@ -357,7 +357,7 @@ function TextReveal({ children, className = '', delay = 0 }: {
 
   return (
     <div ref={ref} className={`overflow-hidden ${className}`}>
-      <motion.div className="flex flex-wrap gap-x-4 gap-y-2">
+      <motion.div className="flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-2">
         {words.map((word, i) => (
           <motion.span
             key={i}
@@ -392,7 +392,7 @@ function SplitText({ children, className = '', delay = 0 }: {
 
   return (
     <div ref={ref} className={`overflow-hidden ${className}`}>
-      <motion.div className="flex">
+      <motion.div className="flex justify-center lg:justify-start">
         {letters.map((letter, i) => (
           <motion.span
             key={i}
@@ -1011,7 +1011,7 @@ export default function Home() {
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.5, ease: [0.33, 0, 0.13, 1] }}
-          className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-16 py-6"
+          className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-16 py-6 bg-slate-950/80 backdrop-blur-md"
         >
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-between">
@@ -1046,11 +1046,12 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* CTA Button */}
+              {/* CTA Button (hidden on mobile) */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1, type: 'spring' }}
+                className="hidden md:block"
               >
                 <MagneticButton onClick={() => scrollToSection('contact')}>
                   <Button className="bg-white text-slate-900 hover:bg-blue-500 hover:text-white font-medium px-7 py-4 rounded-full transition-all duration-300 text-sm uppercase tracking-wider group shadow-lg shadow-white/10 hover:shadow-blue-500/30">
@@ -1119,7 +1120,7 @@ export default function Home() {
           >
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               {/* Left Content */}
-              <div>
+              <div className="text-center lg:text-left">
                 {/* Badge */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -1171,7 +1172,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.8 }}
-                  className="text-lg sm:text-xl text-slate-400 max-w-lg mb-12 leading-relaxed"
+                  className="text-lg sm:text-xl text-slate-400 max-w-lg mb-12 leading-relaxed mx-auto lg:mx-0"
                 >
                   We provide Full Stack Development, AI Automation, and Cyber Security solutions for the modern enterprise.
                 </motion.p>
@@ -1181,7 +1182,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 2 }}
-                  className="flex flex-wrap gap-4"
+                  className="flex flex-wrap gap-4 justify-center lg:justify-start"
                 >
                   <MagneticButton onClick={() => scrollToSection('contact')}>
                     <Button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-6 text-lg rounded-full transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 group" style={{ boxShadow: '0 10px 30px rgba(59, 130, 246, 0.3), 0 20px 50px rgba(59, 130, 246, 0.1)' }}>
@@ -1204,7 +1205,7 @@ export default function Home() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 2.2 }}
-                  className="mt-16 flex items-center gap-8"
+                  className="mt-16 flex items-center gap-8 justify-center lg:justify-start"
                 >
                   <div className="flex -space-x-3">
                     {[1, 2, 3, 4].map((i) => (
@@ -1262,13 +1263,11 @@ export default function Home() {
         {/* MARQUEE SECTION */}
         {/* ======================================== */}
         <section className="py-16 border-y border-slate-800/50 overflow-hidden relative">
-          {/* 3D perspective effect */}
-          <div style={{ perspective: 500 }}>
+          <div>
             <motion.div
               className="flex gap-16 whitespace-nowrap"
               animate={{ x: ['0%', '-50%'] }}
               transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-              style={{ transform: 'rotateX(10deg)' }}
             >
               {[...Array(2)].map((_, setIndex) => (
                 <div key={setIndex} className="flex gap-16">
@@ -1302,7 +1301,7 @@ export default function Home() {
                 <span className="text-sm text-blue-300 uppercase tracking-wider">Our Expertise</span>
               </motion.div>
               
-              <TextReveal className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+              <TextReveal className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 [&>div]:justify-center">
                 Our Core Expertise
               </TextReveal>
               
@@ -1378,7 +1377,7 @@ export default function Home() {
                 </motion.p>
 
                 {/* Stats */}
-                <div className="grid grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   {[
                     { value: 100, suffix: '+', label: 'Projects' },
                     { value: 50, suffix: '+', label: 'Clients' },
@@ -1472,7 +1471,7 @@ export default function Home() {
                   <span className="text-sm text-blue-300 uppercase tracking-wider">Contact</span>
                 </motion.div>
 
-                <SplitText className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+                <SplitText className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 [&>div]:justify-center">
                   Let&apos;s Build Together
                 </SplitText>
 
@@ -1584,7 +1583,7 @@ export default function Home() {
           />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-12">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               {/* Logo */}
               <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-4">
                 <img src="/logo.png" alt="CritiCo Logo" className="h-8 w-auto" />
@@ -1614,7 +1613,7 @@ export default function Home() {
                 transition={{ delay: 0.8 }}
                 className="text-slate-600 text-sm"
               >
-                © 2024 CritiCo. All rights reserved.
+                © 2026 CritiCo. All rights reserved.
               </motion.p>
             </div>
           </div>
