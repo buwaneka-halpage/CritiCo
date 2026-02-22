@@ -21,7 +21,16 @@ import {
   ArrowUpRight,
   Globe,
   Cpu,
-  Terminal
+  Terminal,
+  Layers,
+  ExternalLink,
+  CheckCircle2,
+  Brain,
+  LineChart,
+  ShieldCheck,
+  Smartphone,
+  Database,
+  FileText
 } from 'lucide-react'
 
 // Lazy-load WebGL Shaders (Three.js is heavy — don't block initial paint)
@@ -939,6 +948,8 @@ export default function Home() {
     company: '',
     message: ''
   })
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const heroRef = useRef(null)
   const { scrollYProgress } = useScroll({
@@ -981,7 +992,13 @@ export default function Home() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
+    setIsSubmitting(true)
+    // Simulate sending
+    setTimeout(() => {
+      setIsSubmitting(false)
+      setFormSubmitted(true)
+      setFormData({ name: '', email: '', company: '', message: '' })
+    }, 1500)
   }
 
   return (
@@ -1030,7 +1047,7 @@ export default function Home() {
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-12">
-                {['Services', 'About', 'Contact'].map((item, index) => (
+                {['Services', 'Projects', 'About', 'Contact'].map((item, index) => (
                   <motion.div
                     key={item}
                     initial={{ opacity: 0, y: -20 }}
@@ -1093,7 +1110,7 @@ export default function Home() {
               className="fixed inset-0 bg-slate-950/98 backdrop-blur-xl z-40 flex items-center justify-center"
             >
               <div className="flex flex-col items-center gap-8">
-                {['Services', 'About', 'Contact'].map((item, index) => (
+                {['Services', 'Projects', 'About', 'Contact'].map((item, index) => (
                   <motion.button
                     key={item}
                     initial={{ opacity: 0, y: 30 }}
@@ -1342,6 +1359,198 @@ export default function Home() {
         </section>
 
         {/* ======================================== */}
+        {/* PROJECTS GALLERY SECTION */}
+        {/* ======================================== */}
+        <section id="projects" className="py-32 lg:py-40 px-4 sm:px-8 lg:px-16 relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent pointer-events-none" />
+          <div className="max-w-7xl mx-auto relative">
+            {/* Section Header */}
+            <div className="text-center mb-20">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8"
+              >
+                <Layers className="w-4 h-4 text-blue-400" />
+                <span className="text-sm text-blue-300 uppercase tracking-wider">Our Work</span>
+              </motion.div>
+
+              <TextReveal className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 [&>div]:justify-center">
+                Featured Projects
+              </TextReveal>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-xl text-slate-400 max-w-2xl mx-auto"
+              >
+                Real solutions we&apos;ve delivered for clients across industries.
+              </motion.p>
+
+              <motion.div
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="w-32 h-1 bg-gradient-to-r from-blue-500 to-red-500 mx-auto origin-left mt-6"
+              />
+            </div>
+
+            {/* Projects Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  title: 'NovaPay Dashboard',
+                  category: 'Fintech · AI',
+                  description: 'Real-time fraud detection dashboard for a payment processor handling 2M+ daily transactions. ML models reduced false positives by 73%.',
+                  icon: LineChart,
+                  color: 'blue' as const,
+                  tags: ['React', 'Python', 'TensorFlow', 'AWS'],
+                  metric: '73% fewer false positives',
+                },
+                {
+                  title: 'MedVault Pro',
+                  category: 'Healthcare · Security',
+                  description: 'HIPAA-compliant patient records platform with end-to-end encryption, role-based access, and full audit logging for a hospital network.',
+                  icon: ShieldCheck,
+                  color: 'red' as const,
+                  tags: ['Next.js', 'PostgreSQL', 'OAuth 2.0', 'Azure'],
+                  metric: 'Zero breaches since launch',
+                },
+                {
+                  title: 'ShopSense AI',
+                  category: 'E-Commerce · AI',
+                  description: 'Personalized product recommendation engine for a retail chain with 500K+ SKUs. Increased average order value by 34% in the first quarter.',
+                  icon: Brain,
+                  color: 'blue' as const,
+                  tags: ['Python', 'PyTorch', 'Redis', 'GCP'],
+                  metric: '+34% avg order value',
+                },
+                {
+                  title: 'UrbanPulse IoT',
+                  category: 'Smart City · Full Stack',
+                  description: 'City-wide IoT sensor monitoring platform tracking air quality, traffic, and energy usage across 12,000+ nodes in real time.',
+                  icon: Smartphone,
+                  color: 'blue' as const,
+                  tags: ['Vue.js', 'Go', 'InfluxDB', 'MQTT'],
+                  metric: '12K+ live sensors',
+                },
+                {
+                  title: 'ChainGuard Ledger',
+                  category: 'Supply Chain · Security',
+                  description: 'Blockchain-backed supply chain verification system for a pharmaceutical distributor ensuring provenance across 40+ countries.',
+                  icon: Database,
+                  color: 'red' as const,
+                  tags: ['Solidity', 'Node.js', 'Hyperledger', 'Docker'],
+                  metric: '40+ countries covered',
+                },
+                {
+                  title: 'LegalLens',
+                  category: 'Legal Tech · AI',
+                  description: 'AI-powered contract analysis tool that extracts key clauses, flags risks, and generates summaries — saving lawyers 15+ hours per week.',
+                  icon: FileText,
+                  color: 'blue' as const,
+                  tags: ['Next.js', 'OpenAI', 'LangChain', 'Pinecone'],
+                  metric: '15+ hrs saved / week',
+                },
+              ].map((project, i) => (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, y: 60, rotateX: -5 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.7, delay: i * 0.1, ease: [0.33, 0, 0.13, 1] }}
+                  className="group relative"
+                  style={{ perspective: 1000 }}
+                >
+                  <motion.div
+                    className="relative bg-gradient-to-b from-slate-800/60 to-slate-900/60 backdrop-blur-sm rounded-3xl border border-slate-700/50 overflow-hidden h-full flex flex-col"
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    transition={{ duration: 0.35, ease: [0.33, 0, 0.13, 1] }}
+                    style={{
+                      boxShadow: `0 4px 6px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.2), 0 20px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.05)`,
+                    }}
+                  >
+                    {/* Top gradient bar */}
+                    <div className={`h-1 w-full bg-gradient-to-r ${
+                      project.color === 'blue' ? 'from-blue-500 to-blue-400' : 'from-red-500 to-red-400'
+                    }`} />
+
+                    {/* Hover glow */}
+                    <motion.div
+                      className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                      style={{
+                        background: `linear-gradient(135deg, ${project.color === 'blue' ? 'rgba(59,130,246,0.08)' : 'rgba(239,68,68,0.08)'} 0%, transparent 60%)`,
+                      }}
+                    />
+
+                    <div className="p-8 flex flex-col flex-1">
+                      {/* Icon + Category */}
+                      <div className="flex items-center justify-between mb-5">
+                        <motion.div
+                          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${
+                            project.color === 'blue' ? 'from-blue-500/20 to-blue-600/10' : 'from-red-500/20 to-red-600/10'
+                          } flex items-center justify-center`}
+                          whileHover={{ scale: 1.1, rotateY: 10 }}
+                          style={{
+                            boxShadow: `0 8px 20px ${project.color === 'blue' ? 'rgba(59,130,246,0.15)' : 'rgba(239,68,68,0.15)'}`,
+                          }}
+                        >
+                          <project.icon className={`w-6 h-6 ${project.color === 'blue' ? 'text-blue-400' : 'text-red-400'}`} />
+                        </motion.div>
+                        <span className="text-xs text-slate-500 uppercase tracking-wider font-medium">{project.category}</span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors duration-300">
+                        {project.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1">
+                        {project.description}
+                      </p>
+
+                      {/* Metric badge */}
+                      <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5 w-fit ${
+                        project.color === 'blue'
+                          ? 'bg-blue-500/10 text-blue-300 border border-blue-500/20'
+                          : 'bg-red-500/10 text-red-300 border border-red-500/20'
+                      }`}>
+                        <CheckCircle2 className="w-3 h-3" />
+                        {project.metric}
+                      </div>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {project.tags.map(tag => (
+                          <span key={tag} className="px-2.5 py-1 text-[11px] rounded-md bg-slate-800/80 text-slate-400 border border-slate-700/50 font-mono">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* View link */}
+                      <motion.div
+                        className="flex items-center gap-2 text-slate-500 group-hover:text-blue-400 transition-colors mt-auto"
+                        whileHover={{ x: 6 }}
+                      >
+                        <span className="text-sm font-medium uppercase tracking-wider">View Case Study</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ======================================== */}
         {/* ABOUT SECTION */}
         {/* ======================================== */}
         <section id="about" className="py-32 lg:py-40 px-4 sm:px-8 lg:px-16 relative">
@@ -1487,83 +1696,154 @@ export default function Home() {
               </div>
 
               {/* Contact Form */}
-              <motion.form
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                onSubmit={handleSubmit}
-                className="space-y-6 bg-gradient-to-b from-slate-800/40 to-slate-900/40 backdrop-blur-sm rounded-3xl border border-slate-700/50 p-8 lg:p-12"
-                style={{ 
-                  boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.4), 0 50px 100px -20px rgba(59, 130, 246, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.03)' 
-                }}
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <motion.div whileFocus={{ scale: 1.02 }} className="relative group">
-                    <label className="absolute -top-2.5 left-4 px-2 bg-slate-950 text-xs text-slate-400 uppercase tracking-wider">
-                      Name
-                    </label>
-                    <Input
-                      type="text"
-                      placeholder="John Doe"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-blue-500 focus:ring-0 h-14 rounded-xl transition-all duration-300 hover:border-slate-600"
-                    />
-                  </motion.div>
-                  <motion.div className="relative group">
-                    <label className="absolute -top-2.5 left-4 px-2 bg-slate-950 text-xs text-slate-400 uppercase tracking-wider">
-                      Email
-                    </label>
-                    <Input
-                      type="email"
-                      placeholder="john@company.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-blue-500 focus:ring-0 h-14 rounded-xl transition-all duration-300 hover:border-slate-600"
-                    />
-                  </motion.div>
-                </div>
-                <motion.div className="relative group">
-                  <label className="absolute -top-2.5 left-4 px-2 bg-slate-950 text-xs text-slate-400 uppercase tracking-wider">
-                    Company
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="Company Name"
-                    value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-blue-500 focus:ring-0 h-14 rounded-xl transition-all duration-300 hover:border-slate-600"
-                  />
-                </motion.div>
-                <motion.div className="relative group">
-                  <label className="absolute -top-2.5 left-4 px-2 bg-slate-950 text-xs text-slate-400 uppercase tracking-wider">
-                    Message
-                  </label>
-                  <Textarea
-                    placeholder="Tell us about your project..."
-                    rows={5}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-blue-500 focus:ring-0 rounded-xl resize-none transition-all duration-300 hover:border-slate-600"
-                  />
-                </motion.div>
-                
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button
-                    type="submit"
-                    className="w-full bg-white hover:bg-blue-500 text-slate-900 hover:text-white font-semibold py-6 text-lg rounded-xl transition-all duration-300 shadow-lg hover:shadow-blue-500/30 group overflow-hidden relative"
-                    style={{ boxShadow: '0 10px 30px rgba(255, 255, 255, 0.1)' }}
+              <AnimatePresence mode="wait">
+                {formSubmitted ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: -30 }}
+                    transition={{ duration: 0.6, ease: [0.33, 0, 0.13, 1] }}
+                    className="bg-gradient-to-b from-slate-800/40 to-slate-900/40 backdrop-blur-sm rounded-3xl border border-slate-700/50 p-12 lg:p-16 text-center"
+                    style={{
+                      boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.4), 0 50px 100px -20px rgba(59, 130, 246, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.03)'
+                    }}
                   >
-                    <span className="relative z-10 flex items-center justify-center">
-                      Send Message
-                      <motion.span className="ml-2 inline-block" animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                        <ArrowRight className="w-5 h-5" />
-                      </motion.span>
-                    </span>
-                  </Button>
-                </motion.div>
-              </motion.form>
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 15 }}
+                      className="w-20 h-20 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center mx-auto mb-8"
+                    >
+                      <CheckCircle2 className="w-10 h-10 text-green-400" />
+                    </motion.div>
+                    <motion.h3
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-3xl font-bold text-white mb-4"
+                    >
+                      Message Sent!
+                    </motion.h3>
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="text-lg text-slate-400 mb-8 max-w-md mx-auto"
+                    >
+                      Thanks for reaching out. We&apos;ll review your message and get back to you within 24 hours.
+                    </motion.p>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.7 }}
+                    >
+                      <Button
+                        onClick={() => setFormSubmitted(false)}
+                        className="bg-slate-800 hover:bg-slate-700 text-white font-medium px-8 py-4 rounded-xl transition-all duration-300 border border-slate-700/50"
+                      >
+                        Send Another Message
+                      </Button>
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    onSubmit={handleSubmit}
+                    className="space-y-6 bg-gradient-to-b from-slate-800/40 to-slate-900/40 backdrop-blur-sm rounded-3xl border border-slate-700/50 p-8 lg:p-12"
+                    style={{ 
+                      boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.4), 0 50px 100px -20px rgba(59, 130, 246, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.03)' 
+                    }}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <motion.div whileFocus={{ scale: 1.02 }} className="relative group">
+                        <label className="absolute -top-2.5 left-4 px-2 bg-slate-950 text-xs text-slate-400 uppercase tracking-wider">
+                          Name
+                        </label>
+                        <Input
+                          type="text"
+                          placeholder="John Doe"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-blue-500 focus:ring-0 h-14 rounded-xl transition-all duration-300 hover:border-slate-600"
+                          required
+                        />
+                      </motion.div>
+                      <motion.div className="relative group">
+                        <label className="absolute -top-2.5 left-4 px-2 bg-slate-950 text-xs text-slate-400 uppercase tracking-wider">
+                          Email
+                        </label>
+                        <Input
+                          type="email"
+                          placeholder="john@company.com"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-blue-500 focus:ring-0 h-14 rounded-xl transition-all duration-300 hover:border-slate-600"
+                          required
+                        />
+                      </motion.div>
+                    </div>
+                    <motion.div className="relative group">
+                      <label className="absolute -top-2.5 left-4 px-2 bg-slate-950 text-xs text-slate-400 uppercase tracking-wider">
+                        Company
+                      </label>
+                      <Input
+                        type="text"
+                        placeholder="Company Name"
+                        value={formData.company}
+                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                        className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-blue-500 focus:ring-0 h-14 rounded-xl transition-all duration-300 hover:border-slate-600"
+                      />
+                    </motion.div>
+                    <motion.div className="relative group">
+                      <label className="absolute -top-2.5 left-4 px-2 bg-slate-950 text-xs text-slate-400 uppercase tracking-wider">
+                        Message
+                      </label>
+                      <Textarea
+                        placeholder="Tell us about your project..."
+                        rows={5}
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-blue-500 focus:ring-0 rounded-xl resize-none transition-all duration-300 hover:border-slate-600"
+                        required
+                      />
+                    </motion.div>
+                    
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-white hover:bg-blue-500 text-slate-900 hover:text-white font-semibold py-6 text-lg rounded-xl transition-all duration-300 shadow-lg hover:shadow-blue-500/30 group overflow-hidden relative disabled:opacity-70 disabled:cursor-not-allowed"
+                        style={{ boxShadow: '0 10px 30px rgba(255, 255, 255, 0.1)' }}
+                      >
+                        <span className="relative z-10 flex items-center justify-center">
+                          {isSubmitting ? (
+                            <>
+                              <motion.span
+                                className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full mr-2"
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+                              />
+                              Sending...
+                            </>
+                          ) : (
+                            <>
+                              Send Message
+                              <motion.span className="ml-2 inline-block" animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+                                <ArrowRight className="w-5 h-5" />
+                              </motion.span>
+                            </>
+                          )}
+                        </span>
+                      </Button>
+                    </motion.div>
+                  </motion.form>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </section>
