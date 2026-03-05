@@ -13,6 +13,7 @@ import {
   Code2, 
   Shield, 
   ChevronRight,
+  ChevronLeft,
   ArrowRight,
   Mail,
   Sparkles,
@@ -30,8 +31,11 @@ import {
   ShieldCheck,
   Smartphone,
   Database,
-  FileText
+  FileText,
+  Volume2,
+  MonitorSmartphone
 } from 'lucide-react'
+import Image from 'next/image'
 
 // Lazy-load WebGL Shaders (Three.js is heavy — don't block initial paint)
 const ShaderBackground = lazy(() => import('@/components/shaders/ShaderBackground').then(m => ({ default: m.ShaderBackground })))
@@ -938,6 +942,76 @@ function FeatureShowcase() {
 }
 
 // ============================================
+// PROJECT IMAGE CAROUSEL
+// ============================================
+function ProjectImageCarousel({ images, color }: { images: string[]; color: 'blue' | 'red' }) {
+  const [current, setCurrent] = useState(0)
+  const hasMultiple = images.length > 1
+
+  const next = () => setCurrent((prev) => (prev + 1) % images.length)
+  const prev = () => setCurrent((prev) => (prev - 1 + images.length) % images.length)
+
+  return (
+    <div className="relative w-full aspect-video overflow-hidden bg-slate-900/80">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.4 }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={images[current]}
+            alt={`Screenshot ${current + 1}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Gradient overlay at bottom */}
+      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/60 to-transparent pointer-events-none" />
+
+      {hasMultiple && (
+        <>
+          {/* Prev / Next buttons */}
+          <button
+            onClick={(e) => { e.stopPropagation(); prev() }}
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); next() }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          {/* Dot indicators */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
+            {images.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={(e) => { e.stopPropagation(); setCurrent(idx) }}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  idx === current
+                    ? (color === 'blue' ? 'bg-blue-400 w-5' : 'bg-red-400 w-5')
+                    : 'bg-white/40 hover:bg-white/60'
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+// ============================================
 // MAIN PAGE COMPONENT
 // ============================================
 export default function Home() {
@@ -1401,151 +1475,119 @@ export default function Home() {
             </div>
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
               {[
                 {
-                  title: 'NovaPay Dashboard',
-                  category: 'Fintech · AI',
-                  description: 'Real-time fraud detection dashboard for a payment processor handling 2M+ daily transactions. ML models reduced false positives by 73%.',
-                  icon: LineChart,
+                  title: 'Real-Time Soundboard & Mic Mixer',
+                  category: 'Desktop · Audio',
+                  description: 'A low-latency desktop soundboard that mixes hotkey-triggered audio clips with a live microphone into a single call stream. Features noise reduction, loudness normalization, live transcription, and cloud-synced profiles.',
+                  icon: Volume2,
                   color: 'blue' as const,
-                  tags: ['React', 'Python', 'TensorFlow', 'AWS'],
-                  metric: '73% fewer false positives',
+                  tags: ['C++20', 'Qt 6 / QML', 'RNNoise', 'FFmpeg', 'OpenAI WebSocket', 'OAuth 2.0'],
+                  metric: 'Real-time audio processing',
+                  images: [
+                    '/projects/1/screenshot-1.jpeg',
+                    '/projects/1/screenshot-2.jpeg',
+                    '/projects/1/screenshot-3.jpeg',
+                  ],
                 },
                 {
-                  title: 'MedVault Pro',
-                  category: 'Healthcare · Security',
-                  description: 'HIPAA-compliant patient records platform with end-to-end encryption, role-based access, and full audit logging for a hospital network.',
-                  icon: ShieldCheck,
+                  title: 'Language Institute Management System',
+                  category: 'Web · Full Stack',
+                  description: 'A web-based platform for managing students, courses, finances, and schedules at a language institute. Includes an interactive dashboard with charts for income, expenses, and student analytics.',
+                  icon: MonitorSmartphone,
                   color: 'red' as const,
-                  tags: ['Next.js', 'PostgreSQL', 'OAuth 2.0', 'Azure'],
-                  metric: 'Zero breaches since launch',
+                  tags: ['PHP', 'JavaScript', 'MySQL', 'Chart.js', 'HTML / CSS'],
+                  metric: 'Complete admin platform',
+                  images: [
+                    '/projects/2/screenshot-1.png',
+                  ],
                 },
-                {
-                  title: 'ShopSense AI',
-                  category: 'E-Commerce · AI',
-                  description: 'Personalized product recommendation engine for a retail chain with 500K+ SKUs. Increased average order value by 34% in the first quarter.',
-                  icon: Brain,
-                  color: 'blue' as const,
-                  tags: ['Python', 'PyTorch', 'Redis', 'GCP'],
-                  metric: '+34% avg order value',
-                },
-                {
-                  title: 'UrbanPulse IoT',
-                  category: 'Smart City · Full Stack',
-                  description: 'City-wide IoT sensor monitoring platform tracking air quality, traffic, and energy usage across 12,000+ nodes in real time.',
-                  icon: Smartphone,
-                  color: 'blue' as const,
-                  tags: ['Vue.js', 'Go', 'InfluxDB', 'MQTT'],
-                  metric: '12K+ live sensors',
-                },
-                {
-                  title: 'ChainGuard Ledger',
-                  category: 'Supply Chain · Security',
-                  description: 'Blockchain-backed supply chain verification system for a pharmaceutical distributor ensuring provenance across 40+ countries.',
-                  icon: Database,
-                  color: 'red' as const,
-                  tags: ['Solidity', 'Node.js', 'Hyperledger', 'Docker'],
-                  metric: '40+ countries covered',
-                },
-                {
-                  title: 'LegalLens',
-                  category: 'Legal Tech · AI',
-                  description: 'AI-powered contract analysis tool that extracts key clauses, flags risks, and generates summaries — saving lawyers 15+ hours per week.',
-                  icon: FileText,
-                  color: 'blue' as const,
-                  tags: ['Next.js', 'OpenAI', 'LangChain', 'Pinecone'],
-                  metric: '15+ hrs saved / week',
-                },
-              ].map((project, i) => (
-                <motion.div
-                  key={project.title}
-                  initial={{ opacity: 0, y: 60, rotateX: -5 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.7, delay: i * 0.1, ease: [0.33, 0, 0.13, 1] }}
-                  className="group relative"
-                  style={{ perspective: 1000 }}
-                >
+              ].map((project, i) => {
+                return (
                   <motion.div
-                    className="relative bg-gradient-to-b from-slate-800/60 to-slate-900/60 backdrop-blur-sm rounded-3xl border border-slate-700/50 overflow-hidden h-full flex flex-col"
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    transition={{ duration: 0.35, ease: [0.33, 0, 0.13, 1] }}
-                    style={{
-                      boxShadow: `0 4px 6px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.2), 0 20px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.05)`,
-                    }}
+                    key={project.title}
+                    initial={{ opacity: 0, y: 60, rotateX: -5 }}
+                    whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.7, delay: i * 0.15, ease: [0.33, 0, 0.13, 1] }}
+                    className="group relative"
+                    style={{ perspective: 1000 }}
                   >
-                    {/* Top gradient bar */}
-                    <div className={`h-1 w-full bg-gradient-to-r ${
-                      project.color === 'blue' ? 'from-blue-500 to-blue-400' : 'from-red-500 to-red-400'
-                    }`} />
-
-                    {/* Hover glow */}
                     <motion.div
-                      className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                      className="relative bg-gradient-to-b from-slate-800/60 to-slate-900/60 backdrop-blur-sm rounded-3xl border border-slate-700/50 overflow-hidden h-full flex flex-col"
+                      whileHover={{ y: -8, scale: 1.01 }}
+                      transition={{ duration: 0.35, ease: [0.33, 0, 0.13, 1] }}
                       style={{
-                        background: `linear-gradient(135deg, ${project.color === 'blue' ? 'rgba(59,130,246,0.08)' : 'rgba(239,68,68,0.08)'} 0%, transparent 60%)`,
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.2), 0 20px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.05)',
                       }}
-                    />
+                    >
+                      {/* Top gradient bar */}
+                      <div className={`h-1 w-full bg-gradient-to-r ${
+                        project.color === 'blue' ? 'from-blue-500 to-blue-400' : 'from-red-500 to-red-400'
+                      }`} />
 
-                    <div className="p-8 flex flex-col flex-1">
-                      {/* Icon + Category */}
-                      <div className="flex items-center justify-between mb-5">
-                        <motion.div
-                          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${
-                            project.color === 'blue' ? 'from-blue-500/20 to-blue-600/10' : 'from-red-500/20 to-red-600/10'
-                          } flex items-center justify-center`}
-                          whileHover={{ scale: 1.1, rotateY: 10 }}
-                          style={{
-                            boxShadow: `0 8px 20px ${project.color === 'blue' ? 'rgba(59,130,246,0.15)' : 'rgba(239,68,68,0.15)'}`,
-                          }}
-                        >
-                          <project.icon className={`w-6 h-6 ${project.color === 'blue' ? 'text-blue-400' : 'text-red-400'}`} />
-                        </motion.div>
-                        <span className="text-xs text-slate-500 uppercase tracking-wider font-medium">{project.category}</span>
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors duration-300">
-                        {project.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1">
-                        {project.description}
-                      </p>
-
-                      {/* Metric badge */}
-                      <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5 w-fit ${
-                        project.color === 'blue'
-                          ? 'bg-blue-500/10 text-blue-300 border border-blue-500/20'
-                          : 'bg-red-500/10 text-red-300 border border-red-500/20'
-                      }`}>
-                        <CheckCircle2 className="w-3 h-3" />
-                        {project.metric}
-                      </div>
-
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {project.tags.map(tag => (
-                          <span key={tag} className="px-2.5 py-1 text-[11px] rounded-md bg-slate-800/80 text-slate-400 border border-slate-700/50 font-mono">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* View link */}
+                      {/* Hover glow */}
                       <motion.div
-                        className="flex items-center gap-2 text-slate-500 group-hover:text-blue-400 transition-colors mt-auto"
-                        whileHover={{ x: 6 }}
-                      >
-                        <span className="text-sm font-medium uppercase tracking-wider">View Case Study</span>
-                        <ExternalLink className="w-4 h-4" />
-                      </motion.div>
-                    </div>
+                        className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                        style={{
+                          background: `linear-gradient(135deg, ${project.color === 'blue' ? 'rgba(59,130,246,0.08)' : 'rgba(239,68,68,0.08)'} 0%, transparent 60%)`,
+                        }}
+                      />
+
+                      {/* Image Carousel / Single Image */}
+                      <ProjectImageCarousel images={project.images} color={project.color} />
+
+                      <div className="p-8 flex flex-col flex-1">
+                        {/* Icon + Category */}
+                        <div className="flex items-center justify-between mb-5">
+                          <motion.div
+                            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${
+                              project.color === 'blue' ? 'from-blue-500/20 to-blue-600/10' : 'from-red-500/20 to-red-600/10'
+                            } flex items-center justify-center`}
+                            whileHover={{ scale: 1.1, rotateY: 10 }}
+                            style={{
+                              boxShadow: `0 8px 20px ${project.color === 'blue' ? 'rgba(59,130,246,0.15)' : 'rgba(239,68,68,0.15)'}`,
+                            }}
+                          >
+                            <project.icon className={`w-6 h-6 ${project.color === 'blue' ? 'text-blue-400' : 'text-red-400'}`} />
+                          </motion.div>
+                          <span className="text-xs text-slate-500 uppercase tracking-wider font-medium">{project.category}</span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors duration-300">
+                          {project.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1">
+                          {project.description}
+                        </p>
+
+                        {/* Metric badge */}
+                        <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5 w-fit ${
+                          project.color === 'blue'
+                            ? 'bg-blue-500/10 text-blue-300 border border-blue-500/20'
+                            : 'bg-red-500/10 text-red-300 border border-red-500/20'
+                        }`}>
+                          <CheckCircle2 className="w-3 h-3" />
+                          {project.metric}
+                        </div>
+
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2">
+                          {project.tags.map(tag => (
+                            <span key={tag} className="px-2.5 py-1 text-[11px] rounded-md bg-slate-800/80 text-slate-400 border border-slate-700/50 font-mono">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </section>
